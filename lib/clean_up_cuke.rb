@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require_relative "clean_up_cuke/version"
-require 'cucumber/runtime'
-require 'cucumber/glue/registry'
+require 'cucumber'
+require 'pry'
 
 module CleanUpCuke
   def self.find_unused_step_definitions
@@ -18,23 +18,13 @@ module CleanUpCuke
         {
           paths: [feature_file], # Path to the feature test pack
           dry_run: true,         # Perform a dry run (don't execute steps)
-          # support_to_load: ['functional-tests/features/step_definitions']
+          support_to_load: ['functional-tests/features/step_definitions']
         },
         )
 
-      runtime.send(:load_step_definitions)
-      # Iterate over all step definitions and check if they were used
-      runtime.send(:support_code).step_definitions.each do |step_definition|
-        p step_definition
-        if step_definition.match_locations.empty?
-          # The step definition was not used
-          unused_steps << "#{step_definition.regexp_source} (#{feature_file})"
-        end
-      end
-    end
 
-    # Return the array of unused step definitions
-    unused_steps
+      binding.pry
+    end
   end
 end
 
